@@ -23,6 +23,8 @@ interface CartContext {
   decrement(id: string): void;
 }
 
+const STORAGE_KEY = '@GoMarketplace:products';
+
 const CartContext = createContext<CartContext | null>(null);
 
 const CartProvider: React.FC = ({ children }) => {
@@ -31,6 +33,10 @@ const CartProvider: React.FC = ({ children }) => {
   useEffect(() => {
     async function loadProducts(): Promise<void> {
       // TODO LOAD ITEMS FROM ASYNC STORAGE
+      const response = await AsyncStorage.getItem(STORAGE_KEY);
+      if (response) {
+        setProducts([...JSON.parse(response)]);
+      }
     }
 
     loadProducts();
